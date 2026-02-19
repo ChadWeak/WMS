@@ -23,13 +23,15 @@ function applyTheme(dark) {
 applyTheme(isDark.value)
 
 export function useTheme() {
-  const toggleTheme = () => {
-    isDark.value = !isDark.value
-    localStorage.setItem(STORAGE_KEY, isDark.value)
-    applyTheme(isDark.value)
+  const setTheme = (dark) => {
+    isDark.value = dark
+    localStorage.setItem(STORAGE_KEY, dark)
+    applyTheme(dark)
   }
+  const toggleTheme = () => setTheme(!isDark.value)
   return {
     isDark,
     toggleTheme,
+    setTheme,
   }
 }

@@ -13,9 +13,7 @@
       </button>
     </div>
     <div class="navbar-right">
-      <button type="button" class="btn-icon" @click="toggleTheme">
-        {{ isDark ? 'Light Mode' : 'Dark Mode' }}
-      </button>
+      <ToggleSwitch v-model="darkMode" :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'" />
       <span class="navbar-user">{{ authStore.getUser?.name ?? 'User' }}</span>
       <button type="button" class="btn" @click="handleLogout">Logout</button>
     </div>
@@ -23,11 +21,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import { useTheme } from '../Composables/useTheme.js'
+import ToggleSwitch from 'primevue/toggleswitch'
 
-const { isDark, toggleTheme } = useTheme()
+const { isDark, setTheme } = useTheme()
+
+const darkMode = computed({
+  get: () => isDark.value,
+  set: (value) => setTheme(!!value),
+})
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -89,13 +94,6 @@ const handleLogout = () => {
 }
 .btn:hover {
   background: #f9fafb;
-}
-.btn-icon {
-  padding: 0.25rem 0.5rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1.25rem;
 }
 .navbar-user {
   font-size: 0.875rem;
