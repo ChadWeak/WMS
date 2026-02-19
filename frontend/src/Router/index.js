@@ -3,15 +3,22 @@ import { useAuthStore } from '@/stores/auth.js'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',
-    component: () => import('../views/LoginView.vue'),
+    component: () => import('../Views/LoginView.vue'),
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: () => import('../views/DashboardView.vue'),
+    path: '/',
+    component: () => import('../Layout/AppLayout.vue'),
     meta: { requiresAuth: true },
+    children: [
+      { path: '', redirect: { name: 'dashboard' } },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('../Views/DashboardView.vue'),
+      },
+    ],
   },
 ]
 
@@ -21,8 +28,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+  const isAuthenticated = true //temporary for developmet
+  if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'login' })
   } else {
     next()
